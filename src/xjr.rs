@@ -80,9 +80,7 @@ pub fn each_json_line(
   };
 
   if file == "-" {
-    let stdin = io::stdin();
-    let stdin = stdin.lock();
-    let mut reader = io::BufReader::new(stdin);
+    let mut reader = io::BufReader::new(io::stdin());
     each_line(&mut reader, keys, has_header, split, cb)
   } else {
     let f = fs::File::open(file)?;
