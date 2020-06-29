@@ -8,7 +8,6 @@ use xjr::each_json_line;
 
 fn main() {
     let opts = parse_opts();
-
     let cb = |line| println!("{}", line);
 
     if opts.file == "-" {
