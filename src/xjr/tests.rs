@@ -6,7 +6,7 @@ fn test_each_json_line() {
   let mut jsonl = vec![];
 
   each_json_line(&mut reader, &",", &vec![], false, |line| {
-    jsonl.push(line);
+    jsonl.push(line.to_string());
   })
   .unwrap();
 
@@ -19,7 +19,7 @@ fn test_each_json_line_with_sep() {
   let mut jsonl = vec![];
 
   each_json_line(&mut reader, &"\t", &vec![], false, |line| {
-    jsonl.push(line);
+    jsonl.push(line.to_string());
   })
   .unwrap();
 
@@ -32,7 +32,7 @@ fn test_each_json_line_without_sep() {
   let mut jsonl = vec![];
 
   each_json_line(&mut reader, &"", &vec![], false, |line| {
-    jsonl.push(line);
+    jsonl.push(line.to_string());
   })
   .unwrap();
 
@@ -50,7 +50,7 @@ fn test_each_json_line_with_keys() {
     &vec!["a".to_string(), "b".to_string()],
     false,
     |line| {
-      jsonl.push(line);
+      jsonl.push(line.to_string());
     },
   )
   .unwrap();
@@ -67,7 +67,7 @@ fn test_each_json_line_with_header() {
   let mut jsonl = vec![];
 
   each_json_line(&mut reader, &",", &vec![], true, |line| {
-    jsonl.push(line);
+    jsonl.push(line.to_string());
   })
   .unwrap();
 
@@ -83,7 +83,7 @@ fn test_each_json_line_with_tab_separated_header() {
   let mut jsonl = vec![];
 
   each_json_line(&mut reader, &"\t", &vec![], true, |line| {
-    jsonl.push(line);
+    jsonl.push(line.to_string());
   })
   .unwrap();
 

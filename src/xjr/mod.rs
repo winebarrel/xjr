@@ -17,7 +17,7 @@ pub fn each_json_line<T, F>(
 ) -> Result<(), Box<dyn error::Error>>
 where
   T: io::prelude::BufRead,
-  F: FnMut(String),
+  F: FnMut(&str),
 {
   let mut keys = keys_orig.clone();
   let mut buf = String::new();
@@ -46,7 +46,7 @@ where
   while reader.read_line(&mut buf)? > 0 {
     let cols = split(&buf.trim_end().to_string(), sep);
     let json = to_json(&keys, &cols)?;
-    cb(json);
+    cb(&json);
     buf.clear();
   }
 
