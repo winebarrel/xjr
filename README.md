@@ -2,6 +2,8 @@
 
 xjr is a tool to convert xSV to JSON Lines.
 
+[![Build Status](https://travis-ci.org/winebarrel/xjr.svg?branch=master)](https://travis-ci.org/winebarrel/xjr)
+
 ## Usage
 
 ```
