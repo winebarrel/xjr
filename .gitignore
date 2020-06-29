@@ -1,5 +1,6 @@
 /target
 *.csv
 *.tsv
+/xjr
 *.gz
 *.gz.sha1sum
