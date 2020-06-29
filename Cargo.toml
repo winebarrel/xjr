@@ -1,6 +1,6 @@
 [package]
 name = "xjr"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["winebarrel <sugawara@winebarrel.jp>"]
 edition = "2018"
 
