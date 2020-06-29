@@ -1,19 +1,23 @@
 extern crate serde_json;
 
+#[cfg(test)]
+mod tests;
+
 use std::cmp;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::error;
 use std::io;
 
-pub fn each_json_line<T>(
+pub fn each_json_line<T, F>(
   mut reader: T,
   sep: &String,
   keys_orig: &Vec<String>,
   has_header: bool,
-  cb: fn(String),
+  mut cb: F,
 ) -> Result<(), Box<dyn error::Error>>
 where
   T: io::prelude::BufRead,
+  F: FnMut(String),
 {
   let mut keys = keys_orig.clone();
   let mut buf = String::new();
@@ -29,7 +33,7 @@ where
       return Ok(());
     }
 
-    keys = split(&buf.trim_end().to_string());
+    keys = split(&buf.trim_end().to_string(), sep);
     buf.clear();
   }
 
@@ -40,8 +44,9 @@ where
   };
 
   while reader.read_line(&mut buf)? > 0 {
-    let cols = split(&buf.trim_end().to_string());
-    cb(to_json(&keys, &cols)?);
+    let cols = split(&buf.trim_end().to_string(), sep);
+    let json = to_json(&keys, &cols)?;
+    cb(json);
     buf.clear();
   }
 
@@ -54,7 +59,7 @@ fn to_json_array(_keys: &Vec<String>, cols: &Vec<String>) -> Result<String, serd
 
 fn to_json_obj(keys: &Vec<String>, cols: &Vec<String>) -> Result<String, serde_json::Error> {
   let len = cmp::min(keys.len(), cols.len());
-  let mut m = HashMap::new();
+  let mut m = BTreeMap::new();
 
   for i in 0..len {
     m.insert(keys[i].clone(), cols[i].clone());
@@ -63,14 +68,14 @@ fn to_json_obj(keys: &Vec<String>, cols: &Vec<String>) -> Result<String, serde_j
   serde_json::to_string(&m)
 }
 
-fn split_line(str: &String) -> Vec<String> {
-  if str == "" {
+fn split_line(s: &String, sep: &String) -> Vec<String> {
+  if s == "" {
     vec![]
   } else {
-    str.split(",").map(|s| s.to_string()).collect()
+    s.split(sep).map(|s| s.to_string()).collect()
   }
 }
 
-fn split_line_empty(str: &String) -> Vec<String> {
-  vec![str.clone()]
+fn split_line_empty(s: &String, _sep: &String) -> Vec<String> {
+  vec![s.clone()]
 }
