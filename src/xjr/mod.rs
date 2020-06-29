@@ -10,7 +10,7 @@ use std::io;
 
 pub fn each_json_line<T, F>(
   mut reader: T,
-  sep: &String,
+  sep: &str,
   keys_orig: &Vec<String>,
   has_header: bool,
   mut cb: F,
@@ -68,14 +68,14 @@ fn to_json_obj(keys: &Vec<String>, cols: &Vec<String>) -> Result<String, serde_j
   serde_json::to_string(&m)
 }
 
-fn split_line(s: &String, sep: &String) -> Vec<String> {
+fn split_line(s: &str, sep: &str) -> Vec<String> {
   if s == "" {
     vec![]
   } else {
-    s.split(sep).map(|s| s.to_string()).collect()
+    s.split(sep).map(|c| c.to_string()).collect()
   }
 }
 
-fn split_line_empty(s: &String, _sep: &String) -> Vec<String> {
-  vec![s.clone()]
+fn split_line_empty(s: &str, _sep: &str) -> Vec<String> {
+  vec![s.to_string().clone()]
 }
