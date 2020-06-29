@@ -41,3 +41,7 @@ $ printf "foo,bar\nzoo,baz\n1,2" | xjr --header
 {"foo":"zoo","bar":"baz"}
 {"foo":"1","bar":"2"}
 ```
+
+## Related Links
+
+* https://github.com/winebarrel/xjsonl
