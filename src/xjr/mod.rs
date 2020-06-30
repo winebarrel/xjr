@@ -11,7 +11,7 @@ use std::io;
 pub fn each_json_line<T, F>(
   mut reader: T,
   sep: &str,
-  keys_orig: &Vec<String>,
+  keys: &Vec<String>,
   has_header: bool,
   mut cb: F,
 ) -> Result<(), Box<dyn error::Error>>
@@ -19,7 +19,6 @@ where
   T: io::prelude::BufRead,
   F: FnMut(&str),
 {
-  let mut keys = keys_orig.clone();
   let mut buf = String::new();
 
   let split = if sep.is_empty() {
@@ -28,16 +27,19 @@ where
     split_line
   };
 
-  if has_header {
+  let keys_or_header = if has_header {
     if reader.read_line(&mut buf)? == 0 {
       return Ok(());
     }
 
-    keys = split(&buf.trim_end(), sep);
+    let header = split(&buf.trim_end(), sep);
     buf.clear();
-  }
+    header
+  } else {
+    keys.clone()
+  };
 
-  let to_json = if keys.len() > 0 {
+  let to_json = if keys_or_header.len() > 0 {
     to_json_obj
   } else {
     to_json_array
@@ -45,7 +47,7 @@ where
 
   while reader.read_line(&mut buf)? > 0 {
     let cols = split(&buf.trim_end(), sep);
-    let json = to_json(&keys, &cols)?;
+    let json = to_json(&keys_or_header, &cols)?;
     cb(&json);
     buf.clear();
   }
