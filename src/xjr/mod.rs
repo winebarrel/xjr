@@ -33,7 +33,7 @@ where
       return Ok(());
     }
 
-    keys = split(&buf.trim_end().to_string(), sep);
+    keys = split(&buf.trim_end(), sep);
     buf.clear();
   }
 
@@ -44,7 +44,7 @@ where
   };
 
   while reader.read_line(&mut buf)? > 0 {
-    let cols = split(&buf.trim_end().to_string(), sep);
+    let cols = split(&buf.trim_end(), sep);
     let json = to_json(&keys, &cols)?;
     cb(&json);
     buf.clear();
@@ -77,5 +77,5 @@ fn split_line(s: &str, sep: &str) -> Vec<String> {
 }
 
 fn split_line_empty(s: &str, _sep: &str) -> Vec<String> {
-  vec![s.to_string().clone()]
+  vec![s.to_string()]
 }
