@@ -62,7 +62,7 @@ fn to_json_obj(keys: &Vec<String>, cols: &Vec<String>) -> Result<String, serde_j
   let mut m = BTreeMap::new();
 
   for i in 0..len {
-    m.insert(keys[i].clone(), cols[i].clone());
+    m.insert(&keys[i], &cols[i]);
   }
 
   serde_json::to_string(&m)
